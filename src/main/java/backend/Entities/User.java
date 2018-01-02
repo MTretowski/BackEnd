@@ -14,8 +14,8 @@ public class User {
     private UserRole userRoleByUserRoleId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     public long getId() {
         return id;
     }

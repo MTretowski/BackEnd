@@ -9,7 +9,7 @@ public class Fuelling {
     private double amount;
     private double grossValue;
     private String currency;
-    private Timestamp data;
+    private Timestamp date;
     private long supplierId;
     private long vehicleId;
     private Supplier supplierBySupplierId;
@@ -17,7 +17,7 @@ public class Fuelling {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -57,13 +57,13 @@ public class Fuelling {
     }
 
     @Basic
-    @Column(name = "data")
-    public Timestamp getData() {
-        return data;
+    @Column(name = "date")
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setData(Timestamp data) {
-        this.data = data;
+    public void setDate(Timestamp data) {
+        this.date = data;
     }
 
     @Basic

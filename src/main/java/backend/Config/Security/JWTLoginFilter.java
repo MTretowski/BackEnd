@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
+
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
@@ -28,7 +30,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
                         creds.getUsername(),
-                        creds.getPassword(),
+                        hashpw(creds.getPassword(),"$2a$10$251BUgwQV7l/3xVGpEIYbu"),
                         Collections.emptyList()
                 )
         );

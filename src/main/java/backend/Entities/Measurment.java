@@ -18,7 +18,7 @@ public class Measurment {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -85,40 +85,6 @@ public class Measurment {
 
     public void setMeasuredAmount(boolean measuredAmount) {
         this.measuredAmount = measuredAmount;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Measurment that = (Measurment) o;
-
-        if (id != that.id) return false;
-        if (Double.compare(that.leftFuelTank, leftFuelTank) != 0) return false;
-        if (Double.compare(that.rightFuelTank, rightFuelTank) != 0) return false;
-        if (manualMeasurment != that.manualMeasurment) return false;
-        if (returnToFull != that.returnToFull) return false;
-        if (measuredAmount != that.measuredAmount) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        temp = Double.doubleToLongBits(leftFuelTank);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(rightFuelTank);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (manualMeasurment ? 1 : 0);
-        result = 31 * result + (returnToFull ? 1 : 0);
-        result = 31 * result + (measuredAmount ? 1 : 0);
-        return result;
     }
 
     @OneToMany(mappedBy = "measurmentByStartingMeasurmentId")
