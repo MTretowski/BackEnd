@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public HttpStatus addUser(User user) {
         user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            return HttpStatus.BAD_REQUEST;
+            return HttpStatus.CONFLICT;
         } else {
             user.setPassword(hashpw(user.getPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
             userRepository.save(user);
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public HttpStatus updateUser(User user) {
         user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
         if (userRepository.findById(user.getId()) == null) {
-            return HttpStatus.BAD_REQUEST;
+            return HttpStatus.CONFLICT;
         } else {
             userRepository.save(user);
             return HttpStatus.OK;
@@ -79,10 +79,10 @@ public class UserServiceImpl implements UserService {
     public HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO) {
         User user = userRepository.findById(updatePasswordFormDTO.getUserId());
         if (user == null) {
-            return HttpStatus.BAD_REQUEST;
+            return HttpStatus.CONFLICT;
         } else {
             if (!checkpw(updatePasswordFormDTO.getOldPassword(), user.getPassword())) {
-                return HttpStatus.BAD_REQUEST;
+                return HttpStatus.CONFLICT;
             } else {
                 user.setPassword(hashpw(updatePasswordFormDTO.getNewPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
                 userRepository.save(user);
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
     public HttpStatus resetPassword(ResetPasswordFormDTO resetPasswordFormDTO) {
         User user = userRepository.findById(resetPasswordFormDTO.getUserId());
         if (user == null) {
-            return HttpStatus.BAD_REQUEST;
+            return HttpStatus.CONFLICT;
         } else {
             user.setPassword(hashpw(resetPasswordFormDTO.getNewPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
             userRepository.save(user);
