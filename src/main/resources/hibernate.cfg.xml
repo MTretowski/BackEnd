@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/praca_inzynierska</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+      <mapping class="backend.Entities.Driver"/>
+    <mapping class="backend.Entities.FirstDriver"/>
+    <mapping class="backend.Entities.Fuelling"/>
+    <mapping class="backend.Entities.Measurment"/>
+    <mapping class="backend.Entities.SecondDriver"/>
+    <mapping class="backend.Entities.Supplier"/>
+    <mapping class="backend.Entities.Trip"/>
+    <mapping class="backend.Entities.User"/>
+    <mapping class="backend.Entities.UserRole"/>
+    <mapping class="backend.Entities.Vehicle"/>
+    <mapping class="backend.Entities.EndingMeasurment"/>
+    <mapping class="backend.Entities.StartingMeasurment"/>
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>
