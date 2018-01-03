@@ -22,6 +22,7 @@ public class DriverServiceImpl implements DriverService {
         this.driverRepository = driverRepository;
     }
 
+    @Override
     public List<DriverDTO> findAll() {
 
         List<Driver> driversInDatabase = driverRepository.findAll();
@@ -38,6 +39,7 @@ public class DriverServiceImpl implements DriverService {
         return driverDTOS;
     }
 
+    @Override
     public HttpStatus addDriver(Driver driver) {
         if (driverRepository.findByFirstNameAndLastName(driver.getFirstName(), driver.getLastName()) != null) {
             return HttpStatus.CONFLICT;
@@ -47,6 +49,7 @@ public class DriverServiceImpl implements DriverService {
         }
     }
 
+    @Override
     public HttpStatus updateDriver(Driver driver) {
         if (driverRepository.findById(driver.getId()) == null) {
             return HttpStatus.CONFLICT;
@@ -55,6 +58,7 @@ public class DriverServiceImpl implements DriverService {
         }
     }
 
+    @Override
     public void deleteDriver(long id) {
         driverRepository.deleteById(id);
     }

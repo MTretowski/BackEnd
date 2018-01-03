@@ -22,6 +22,7 @@ public class VehicleServiceImpl implements VehicleService {
         this.vehicleRepository = vehicleRepository;
     }
 
+    @Override
     public List<VehicleDTO> findAll() {
         List<Vehicle> vehiclesInDatabase = vehicleRepository.findAll();
         List<VehicleDTO> vehicleDTOS = new ArrayList<>(vehiclesInDatabase.size());
@@ -42,6 +43,7 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleDTOS;
     }
 
+    @Override
     public HttpStatus addVehicle(Vehicle vehicle) {
         if (vehicleRepository.findByPlateNumbers(vehicle.getPlateNumbers()) != null) {
             return HttpStatus.CONFLICT;
@@ -51,6 +53,7 @@ public class VehicleServiceImpl implements VehicleService {
         }
     }
 
+    @Override
     public HttpStatus updateVehicle(Vehicle vehicle) {
         if (vehicleRepository.findById(vehicle.getId()) == null) {
             return HttpStatus.CONFLICT;
@@ -60,6 +63,7 @@ public class VehicleServiceImpl implements VehicleService {
         }
     }
 
+    @Override
     public void deleteVehicle(long id){
         vehicleRepository.deleteById(id);
     }

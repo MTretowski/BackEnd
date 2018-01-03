@@ -19,6 +19,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         this.userRepository = userRepository;
     }
 
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepository.findByUsername(username);
@@ -35,7 +36,5 @@ public class UserDetailsService implements org.springframework.security.core.use
                 .credentialsExpired(false)
                 .disabled(false)
                 .build();
-
     }
-
 }

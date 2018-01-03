@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
         this.userRoleRepository = userRoleRepository;
     }
 
+    @Override
     public List<UserDTO> findAll() {
 
         List<User> usersInDatabase = userRepository.findAll();
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
-
+    @Override
     public HttpStatus addUser(User user) {
         user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
         if (userRepository.findByUsername(user.getUsername()) != null) {
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public HttpStatus updateUser(User user) {
         user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
         if (userRepository.findById(user.getId()) == null) {
@@ -72,10 +74,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 
+    @Override
     public HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO) {
         User user = userRepository.findById(updatePasswordFormDTO.getUserId());
         if (user == null) {
@@ -91,6 +95,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public HttpStatus resetPassword(ResetPasswordFormDTO resetPasswordFormDTO) {
         User user = userRepository.findById(resetPasswordFormDTO.getUserId());
         if (user == null) {

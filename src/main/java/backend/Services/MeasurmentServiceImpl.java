@@ -5,6 +5,7 @@ import backend.Entities.Measurment;
 import backend.Repositories.MeasurmentRepository;
 import backend.Repositories.TripRepository;
 import backend.Repositories.VehicleRepository;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         this.vehicleRepository = vehicleRepository;
     }
 
+    @Override
     public List<MeasurmentDTO> findAll() {
         List<Measurment> measurmentsInDatabase = measurmentRepository.findAll();
         List<MeasurmentDTO> measurmentDTOS = new ArrayList<>(measurmentsInDatabase.size());
@@ -80,6 +82,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         else return 0.0;
     }
 
+    @Override
     public HttpStatus addMeasurment(Measurment measurment) {
         if(measurmentRepository.findByVehicleIdAndDate(measurment.getVehicleId(), measurment.getDate()) != null){
             return HttpStatus.CONFLICT;
