@@ -47,9 +47,8 @@ public class MeasurmentServiceImpl implements MeasurmentService {
                     measurment.isMeasuredAmount(),
                     measurment.getVehicleId(),
                     vehicleRepository.findById(measurment.getVehicleId()).getPlateNumbers(),
-                    "test1","test1"
-                    //tripRepository.findByStartingMeasurmentId(measurment.getId()).getBusinnesTripNumber(),
-                    //tripRepository.findByEndingMeasurmentId(measurment.getId()).getBusinnesTripNumber()
+                    tripRepository.findByStartingMeasurmentId(measurment.getId()).getBusinnesTripNumber(),
+                    tripRepository.findByEndingMeasurmentId(measurment.getId()).getBusinnesTripNumber()
             ));
         }
 
