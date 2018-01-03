@@ -1,0 +1,108 @@
+package backend.Services;
+
+import backend.DTOs.MeasurmentDTO;
+import backend.Entities.Measurment;
+import backend.Repositories.MeasurmentRepository;
+import backend.Repositories.TripRepository;
+import backend.Repositories.VehicleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@Transactional
+public class MeasurmentServiceImpl implements MeasurmentService {
+
+    private MeasurmentRepository measurmentRepository;
+    private TripRepository tripRepository;
+    private VehicleRepository vehicleRepository;
+
+    @Autowired
+    public MeasurmentServiceImpl(MeasurmentRepository measurmentRepository, TripRepository tripRepository, VehicleRepository vehicleRepository) {
+        this.measurmentRepository = measurmentRepository;
+        this.tripRepository = tripRepository;
+        this.vehicleRepository = vehicleRepository;
+    }
+
+    public List<MeasurmentDTO> findAll() {
+        List<Measurment> measurmentsInDatabase = measurmentRepository.findAll();
+        List<MeasurmentDTO> measurmentDTOS = new ArrayList<>(measurmentsInDatabase.size());
+
+        for (Measurment measurment : measurmentsInDatabase) {
+            measurmentDTOS.add(new MeasurmentDTO(
+                    measurment.getId(),
+                    measurment.getDate(),
+                    measurment.getLeftFuelTank(),
+                    measurment.getRightFuelTank(),
+                    calculateLeftFuelTankAmount(measurment),
+                    calculateRightFuelTankAmount(measurment),
+                    measurment.isManualMeasurment(),
+                    measurment.isReturnToFull(),
+                    measurment.isMeasuredAmount(),
+                    measurment.getVehicleId(),
+                    vehicleRepository.findById(measurment.getVehicleId()).getPlateNumbers(),
+                    "test1","test1"
+                    //tripRepository.findByStartingMeasurmentId(measurment.getId()).getBusinnesTripNumber(),
+                    //tripRepository.findByEndingMeasurmentId(measurment.getId()).getBusinnesTripNumber()
+            ));
+        }
+
+        return measurmentDTOS;
+    }
+
+    private Double calculateLeftFuelTankAmount(Measurment measurment){
+        if(measurment.isManualMeasurment()){
+            return measurment.getLeftFuelTank() * vehicleRepository.findById(measurment.getVehicleId()).getLeftTankConverter();
+        }
+        else if(measurment.isReturnToFull()){
+            return vehicleRepository.findById(measurment.getVehicleId()).getLeftTankCapacity() - measurment.getLeftFuelTank();
+        }
+        else if(measurment.isMeasuredAmount()){
+            return measurment.getLeftFuelTank();
+        }
+        else return 0.0;
+    }
+
+    private Double calculateRightFuelTankAmount(Measurment measurment){
+        if(measurment.isManualMeasurment()){
+            return measurment.getRightFuelTank() * vehicleRepository.findById(measurment.getVehicleId()).getRightTankConverter();
+        }
+        else if(measurment.isReturnToFull()){
+            return vehicleRepository.findById(measurment.getVehicleId()).getRightTankCapacity() - measurment.getRightFuelTank();
+        }
+        else if(measurment.isMeasuredAmount()){
+            return measurment.getRightFuelTank();
+        }
+        else return 0.0;
+    }
+
+    public HttpStatus addMeasurment(Measurment measurment) {
+        if(measurmentRepository.findByVehicleIdAndDate(measurment.getVehicleId(), measurment.getDate()) != null){
+            return HttpStatus.CONFLICT;
+        }
+        else{
+            measurmentRepository.save(measurment);
+            return HttpStatus.OK;
+        }
+    }
+
+    @Override
+    public HttpStatus updateMeasurment(Measurment measurment) {
+        if(measurmentRepository.findById(measurment.getId()) == null){
+            return HttpStatus.CONFLICT;
+        }
+        else{
+            measurmentRepository.save(measurment);
+            return HttpStatus.OK;
+        }
+    }
+
+    @Override
+    public void deleteMeasurment(long id) {
+        measurmentRepository.deleteById(id);
+    }
+}
