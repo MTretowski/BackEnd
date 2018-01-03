@@ -13,12 +13,13 @@ public class Measurment {
     private boolean manualMeasurment;
     private boolean returnToFull;
     private boolean measuredAmount;
+    private long vehicleId;
+    private Vehicle vehicleByVehicleId;
     private Collection<Trip> tripsById;
     private Collection<Trip> tripsById_0;
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -85,6 +86,26 @@ public class Measurment {
 
     public void setMeasuredAmount(boolean measuredAmount) {
         this.measuredAmount = measuredAmount;
+    }
+
+    @Basic
+    @Column(name = "vehicle_id")
+    public long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Vehicle getVehicleByVehicleId() {
+        return vehicleByVehicleId;
+    }
+
+    public void setVehicleByVehicleId(Vehicle vehicleByVehicleId) {
+        this.vehicleByVehicleId = vehicleByVehicleId;
     }
 
     @OneToMany(mappedBy = "measurmentByStartingMeasurmentId")

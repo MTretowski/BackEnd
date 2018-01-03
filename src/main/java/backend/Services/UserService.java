@@ -1,8 +1,8 @@
 package backend.Services;
 
-import backend.DTO.ResetPasswordFormDTO;
-import backend.DTO.UpdatePasswordFormDTO;
-import backend.DTO.UserDTO;
+import backend.DTOs.ResetPasswordFormDTO;
+import backend.DTOs.UpdatePasswordFormDTO;
+import backend.DTOs.UserDTO;
 import backend.Entities.User;
 import org.springframework.http.HttpStatus;
 

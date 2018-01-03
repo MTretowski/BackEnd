@@ -14,11 +14,11 @@ public class Vehicle {
     private Double rightTankCapacity;
     private boolean active;
     private Collection<Fuelling> fuellingsById;
+    private Collection<Measurment> measurmentsById;
     private Collection<Trip> tripsById;
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -104,6 +104,15 @@ public class Vehicle {
 
     public void setFuellingsById(Collection<Fuelling> fuellingsById) {
         this.fuellingsById = fuellingsById;
+    }
+
+    @OneToMany(mappedBy = "vehicleByVehicleId")
+    public Collection<Measurment> getMeasurmentsById() {
+        return measurmentsById;
+    }
+
+    public void setMeasurmentsById(Collection<Measurment> measurmentsById) {
+        this.measurmentsById = measurmentsById;
     }
 
     @OneToMany(mappedBy = "vehicleByVehicleId")

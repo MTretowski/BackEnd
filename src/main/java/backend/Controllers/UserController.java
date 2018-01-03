@@ -1,8 +1,8 @@
 package backend.Controllers;
 
-import backend.DTO.UpdatePasswordFormDTO;
-import backend.DTO.ResetPasswordFormDTO;
-import backend.DTO.UserDTO;
+import backend.DTOs.UpdatePasswordFormDTO;
+import backend.DTOs.ResetPasswordFormDTO;
+import backend.DTOs.UserDTO;
 import backend.Entities.User;
 import backend.Services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,27 +31,30 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping(value = "/user/add")
-    public ResponseEntity<Void> addUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.addUser(user));
+    public ResponseEntity<List<UserDTO>> addUser(@RequestBody User user){
+        HttpStatus responseStatus = userService.addUser(user);
+        return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping(value = "/user/update")
-    public ResponseEntity<Void> updateUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.updateUser(user));
+    public ResponseEntity<List<UserDTO>> updateUser(@RequestBody User user){
+        HttpStatus responseStatus = userService.updateUser(user);
+        return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @DeleteMapping(value = "/user/delete")
-    public ResponseEntity<Void> deleteUser(@RequestBody long id){
+    public ResponseEntity<List<UserDTO>> deleteUser(@RequestBody long id){
         userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping(value = "/user/resetPassword")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordFormDTO resetPasswordFormDTO){
-        return new ResponseEntity<>(userService.resetPassword(resetPasswordFormDTO));
+    public ResponseEntity<List<UserDTO>> resetPassword(@RequestBody ResetPasswordFormDTO resetPasswordFormDTO){
+        HttpStatus responseStatus = userService.resetPassword(resetPasswordFormDTO);
+        return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")

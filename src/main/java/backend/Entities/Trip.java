@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @Entity
 public class Trip {
     private long id;
-    private String businnesTripNumebr;
+    private String businnesTripNumber;
     private Timestamp startDate;
     private Timestamp endDate;
     private double distance;
@@ -28,7 +28,6 @@ public class Trip {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -38,13 +37,13 @@ public class Trip {
     }
 
     @Basic
-    @Column(name = "businnes_trip_numebr")
-    public String getBusinnesTripNumebr() {
-        return businnesTripNumebr;
+    @Column(name = "businnes_trip_number")
+    public String getBusinnesTripNumber() {
+        return businnesTripNumber;
     }
 
-    public void setBusinnesTripNumebr(String businnesTripNumebr) {
-        this.businnesTripNumebr = businnesTripNumebr;
+    public void setBusinnesTripNumber(String businnesTripNumber) {
+        this.businnesTripNumber = businnesTripNumber;
     }
 
     @Basic

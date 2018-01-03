@@ -1,6 +1,6 @@
 package backend.Controllers;
 
-import backend.DTO.DriverDTO;
+import backend.DTOs.DriverDTO;
 import backend.Entities.Driver;
 import backend.Services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +23,29 @@ public class DriverController {
 
     @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping(value = "/drivers")
-    public ResponseEntity<List<DriverDTO>> getDrivers(){
+    public ResponseEntity<List<DriverDTO>> getDrivers() {
         return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping(value = "/driver/add")
-    public ResponseEntity<Void> addDriver(@RequestBody Driver driver){
-        return new ResponseEntity<>(driverService.addDriver(driver));
+    public ResponseEntity<List<DriverDTO>> addDriver(@RequestBody Driver driver) {
+        HttpStatus responseStatus = driverService.addDriver(driver);
+        return new ResponseEntity<>(driverService.findAll(), responseStatus);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping(value = "/driver/update")
-    public ResponseEntity<Void> updateDriver(@RequestBody Driver driver){
-        return new ResponseEntity<>(driverService.updateDriver(driver));
+    public ResponseEntity<List<DriverDTO>> updateDriver(@RequestBody Driver driver) {
+        HttpStatus responseStatus = driverService.updateDriver(driver);
+        return new ResponseEntity<>(driverService.findAll(), responseStatus);
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
     @DeleteMapping(value = "/driver/delete")
-    public ResponseEntity<Void> delete(@RequestBody long id){
+    public ResponseEntity<List<DriverDTO>> delete(@RequestBody long id) {
         driverService.deleteDriver(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
     }
 
 

@@ -12,7 +12,6 @@ public class UserRole {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -30,7 +29,6 @@ public class UserRole {
     public void setName(String name) {
         this.name = name;
     }
-
 
     @OneToMany(mappedBy = "userRoleByUserRoleId")
     public Collection<User> getUsersById() {

@@ -1,4 +1,4 @@
-package backend.DTO;
+package backend.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

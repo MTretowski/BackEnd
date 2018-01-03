@@ -17,7 +17,6 @@ public class Fuelling {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -62,8 +61,8 @@ public class Fuelling {
         return date;
     }
 
-    public void setDate(Timestamp data) {
-        this.date = data;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
     @Basic

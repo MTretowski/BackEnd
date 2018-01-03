@@ -1,6 +1,6 @@
 package backend.Services;
 
-import backend.DTO.DriverDTO;
+import backend.DTOs.DriverDTO;
 import backend.Entities.Driver;
 import org.springframework.http.HttpStatus;
 

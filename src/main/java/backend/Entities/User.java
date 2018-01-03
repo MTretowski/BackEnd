@@ -14,7 +14,6 @@ public class User {
     private UserRole userRoleByUserRoleId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;
@@ -75,7 +74,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_role_id", insertable = false, updatable = false)
+    @Column(name = "user_role_id")
     public long getUserRoleId() {
         return userRoleId;
     }
@@ -85,7 +84,7 @@ public class User {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_role_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public UserRole getUserRoleByUserRoleId() {
         return userRoleByUserRoleId;
     }

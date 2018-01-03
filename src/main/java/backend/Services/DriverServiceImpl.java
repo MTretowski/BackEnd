@@ -1,6 +1,6 @@
 package backend.Services;
 
-import backend.DTO.DriverDTO;
+import backend.DTOs.DriverDTO;
 import backend.Entities.Driver;
 import backend.Repositories.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class DriverServiceImpl implements DriverService {
     public List<DriverDTO> findAll() {
 
         List<Driver> driversInDatabase = driverRepository.findAll();
-        List<DriverDTO> driverDTOS = new ArrayList<>();
+        List<DriverDTO> driverDTOS = new ArrayList<>(driversInDatabase.size());
 
         for (Driver driver : driversInDatabase) {
             driverDTOS.add(new DriverDTO(

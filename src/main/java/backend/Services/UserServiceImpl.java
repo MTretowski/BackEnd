@@ -1,8 +1,8 @@
 package backend.Services;
 
-import backend.DTO.ResetPasswordFormDTO;
-import backend.DTO.UpdatePasswordFormDTO;
-import backend.DTO.UserDTO;
+import backend.DTOs.ResetPasswordFormDTO;
+import backend.DTOs.UpdatePasswordFormDTO;
+import backend.DTOs.UserDTO;
 import backend.Entities.User;
 import backend.Repositories.UserRepository;
 import backend.Repositories.UserRoleRepository;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll() {
 
         List<User> usersInDatabase = userRepository.findAll();
-        List<UserDTO> userDTOS = new ArrayList<>();
+        List<UserDTO> userDTOS = new ArrayList<>(usersInDatabase.size());
 
         for (User user : usersInDatabase) {
             userDTOS.add(new UserDTO(
