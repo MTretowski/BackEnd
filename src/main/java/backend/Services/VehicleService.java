@@ -13,7 +13,4 @@ public interface VehicleService {
     HttpStatus addVehicle(Vehicle vehicle);
 
     HttpStatus updateVehicle(Vehicle vehicle);
-
-    void deleteVehicle(long id);
-
 }

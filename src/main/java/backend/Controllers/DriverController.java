@@ -40,13 +40,4 @@ public class DriverController {
         HttpStatus responseStatus = driverService.updateDriver(driver);
         return new ResponseEntity<>(driverService.findAll(), responseStatus);
     }
-
-    @CrossOrigin(origins = "http://localhost:8000")
-    @DeleteMapping(value = "/driver/delete")
-    public ResponseEntity<List<DriverDTO>> delete(@RequestBody long id) {
-        driverService.deleteDriver(id);
-        return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
-    }
-
-
 }

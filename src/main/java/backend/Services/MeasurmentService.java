@@ -14,5 +14,5 @@ public interface MeasurmentService {
 
     HttpStatus updateMeasurment(Measurment measurment);
 
-    void deleteMeasurment(long id);
+    HttpStatus deleteMeasurment(long id);
 }

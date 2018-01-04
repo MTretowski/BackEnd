@@ -40,11 +40,4 @@ public class VehicleController {
         HttpStatus responseStatus = vehicleService.updateVehicle(vehicle);
         return new ResponseEntity<>(vehicleService.findAll(), responseStatus);
     }
-
-    @CrossOrigin(origins = "http://localhost:8000")
-    @DeleteMapping(value = "/vehicle/delete")
-    public ResponseEntity<List<VehicleDTO>> deleteVehicle(@RequestBody long id){
-        vehicleService.deleteVehicle(id);
-        return new ResponseEntity<>(vehicleService.findAll(),HttpStatus.OK);
-    }
 }

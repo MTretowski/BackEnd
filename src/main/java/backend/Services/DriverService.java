@@ -13,6 +13,4 @@ public interface DriverService {
     HttpStatus addDriver(Driver driver);
 
     HttpStatus updateDriver(Driver driver);
-
-    void deleteDriver(long id);
 }

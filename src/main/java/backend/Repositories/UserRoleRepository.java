@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface UserRoleRepository extends CrudRepository <UserRole, Long> {
 
     UserRole findById(long id);
-
 }

@@ -62,9 +62,4 @@ public class VehicleServiceImpl implements VehicleService {
             return HttpStatus.OK;
         }
     }
-
-    @Override
-    public void deleteVehicle(long id){
-        vehicleRepository.deleteById(id);
-    }
 }

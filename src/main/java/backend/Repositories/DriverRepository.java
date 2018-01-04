@@ -14,7 +14,4 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
     Driver findByFirstNameAndLastName(String firstName, String lastName);
 
     Driver findById(long id);
-
-    void deleteById(long id);
-
 }

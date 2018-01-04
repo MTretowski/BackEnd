@@ -75,11 +75,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
     public HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO) {
         User user = userRepository.findById(updatePasswordFormDTO.getUserId());
         if (user == null) {

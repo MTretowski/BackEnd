@@ -2,6 +2,7 @@ package backend.Services;
 
 import backend.DTOs.MeasurmentDTO;
 import backend.Entities.Measurment;
+import backend.Entities.Trip;
 import backend.Repositories.MeasurmentRepository;
 import backend.Repositories.TripRepository;
 import backend.Repositories.VehicleRepository;
@@ -47,46 +48,57 @@ public class MeasurmentServiceImpl implements MeasurmentService {
                     measurment.isMeasuredAmount(),
                     measurment.getVehicleId(),
                     vehicleRepository.findById(measurment.getVehicleId()).getPlateNumbers(),
-                    tripRepository.findByStartingMeasurmentId(measurment.getId()).getBusinnesTripNumber(),
-                    tripRepository.findByEndingMeasurmentId(measurment.getId()).getBusinnesTripNumber()
-            ));
+                    getStartedTrip(measurment.getId()),
+                    getEndedTrip(measurment.getId())
+                    ));
         }
 
         return measurmentDTOS;
     }
 
-    private Double calculateLeftFuelTankAmount(Measurment measurment){
-        if(measurment.isManualMeasurment()){
-            return measurment.getLeftFuelTank() * vehicleRepository.findById(measurment.getVehicleId()).getLeftTankConverter();
+    private String getStartedTrip(long id) {
+        Trip trip = tripRepository.findByStartingMeasurmentId(id);
+        if (trip == null) {
+            return "";
+        } else {
+            return trip.getBusinnesTripNumber();
         }
-        else if(measurment.isReturnToFull()){
-            return vehicleRepository.findById(measurment.getVehicleId()).getLeftTankCapacity() - measurment.getLeftFuelTank();
-        }
-        else if(measurment.isMeasuredAmount()){
-            return measurment.getLeftFuelTank();
-        }
-        else return 0.0;
     }
 
-    private Double calculateRightFuelTankAmount(Measurment measurment){
-        if(measurment.isManualMeasurment()){
+    private String getEndedTrip(long id) {
+        Trip trip = tripRepository.findByEndingMeasurmentId(id);
+        if (trip == null) {
+            return "";
+        } else {
+            return trip.getBusinnesTripNumber();
+        }
+    }
+
+    private Double calculateLeftFuelTankAmount(Measurment measurment) {
+        if (measurment.isManualMeasurment()) {
+            return measurment.getLeftFuelTank() * vehicleRepository.findById(measurment.getVehicleId()).getLeftTankConverter();
+        } else if (measurment.isReturnToFull()) {
+            return vehicleRepository.findById(measurment.getVehicleId()).getLeftTankCapacity() - measurment.getLeftFuelTank();
+        } else if (measurment.isMeasuredAmount()) {
+            return measurment.getLeftFuelTank();
+        } else return 0.0;
+    }
+
+    private Double calculateRightFuelTankAmount(Measurment measurment) {
+        if (measurment.isManualMeasurment()) {
             return measurment.getRightFuelTank() * vehicleRepository.findById(measurment.getVehicleId()).getRightTankConverter();
-        }
-        else if(measurment.isReturnToFull()){
+        } else if (measurment.isReturnToFull()) {
             return vehicleRepository.findById(measurment.getVehicleId()).getRightTankCapacity() - measurment.getRightFuelTank();
-        }
-        else if(measurment.isMeasuredAmount()){
+        } else if (measurment.isMeasuredAmount()) {
             return measurment.getRightFuelTank();
-        }
-        else return 0.0;
+        } else return 0.0;
     }
 
     @Override
     public HttpStatus addMeasurment(Measurment measurment) {
-        if(measurmentRepository.findByVehicleIdAndDate(measurment.getVehicleId(), measurment.getDate()) != null){
+        if (measurmentRepository.findByVehicleIdAndDate(measurment.getVehicleId(), measurment.getDate()) != null) {
             return HttpStatus.CONFLICT;
-        }
-        else{
+        } else {
             measurmentRepository.save(measurment);
             return HttpStatus.OK;
         }
@@ -94,17 +106,21 @@ public class MeasurmentServiceImpl implements MeasurmentService {
 
     @Override
     public HttpStatus updateMeasurment(Measurment measurment) {
-        if(measurmentRepository.findById(measurment.getId()) == null){
+        if (measurmentRepository.findById(measurment.getId()) == null) {
             return HttpStatus.CONFLICT;
-        }
-        else{
+        } else {
             measurmentRepository.save(measurment);
             return HttpStatus.OK;
         }
     }
 
     @Override
-    public void deleteMeasurment(long id) {
-        measurmentRepository.deleteById(id);
+    public HttpStatus deleteMeasurment(long id) {
+        if (tripRepository.findByStartingMeasurmentId(id) != null || tripRepository.findByEndingMeasurmentId(id) != null) {
+            return HttpStatus.CONFLICT;
+        } else {
+            measurmentRepository.deleteById(id);
+            return HttpStatus.OK;
+        }
     }
 }

@@ -16,8 +16,6 @@ public interface UserService {
 
     HttpStatus updateUser(User user);
 
-    void deleteUser(long id);
-
     HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO);
 
     HttpStatus resetPassword(ResetPasswordFormDTO resetPasswordFormDTO);

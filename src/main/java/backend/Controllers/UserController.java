@@ -44,13 +44,6 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://localhost:8000")
-    @DeleteMapping(value = "/user/delete")
-    public ResponseEntity<List<UserDTO>> deleteUser(@RequestBody long id){
-        userService.deleteUser(id);
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
-    }
-
-    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping(value = "/user/resetPassword")
     public ResponseEntity<List<UserDTO>> resetPassword(@RequestBody ResetPasswordFormDTO resetPasswordFormDTO){
         HttpStatus responseStatus = userService.resetPassword(resetPasswordFormDTO);
@@ -62,6 +55,4 @@ public class UserController {
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordFormDTO updatePasswordFormDTO){
         return new ResponseEntity<>(userService.updatePassword(updatePasswordFormDTO));
     }
-
-
 }

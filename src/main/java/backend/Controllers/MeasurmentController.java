@@ -44,7 +44,7 @@ public class MeasurmentController {
     @CrossOrigin(origins = "http://localhost:8000")
     @DeleteMapping(value = "/measurment/delete")
     public ResponseEntity<List<MeasurmentDTO>> deleteMeasurments(@RequestBody long id){
-        measurmentService.deleteMeasurment(id);
-        return new ResponseEntity<>(measurmentService.findAll(), HttpStatus.OK);
+        HttpStatus responseStatus = measurmentService.deleteMeasurment(id);
+        return new ResponseEntity<>(measurmentService.findAll(), responseStatus);
     }
 }

@@ -14,7 +14,4 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     Vehicle findByPlateNumbers(String plateNumbers);
 
     List<Vehicle> findAll();
-
-    void deleteById(long id);
-
 }

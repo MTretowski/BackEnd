@@ -57,10 +57,4 @@ public class DriverServiceImpl implements DriverService {
             return addDriver(driver);
         }
     }
-
-    @Override
-    public void deleteDriver(long id) {
-        driverRepository.deleteById(id);
-    }
-
 }
