@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Getter
 public class TripDTO {
     private long id;
-    private String businnesTripNumber;
+    private String businessTripNumber;
     private Timestamp startDate;
     private Timestamp endDate;
     private double distance;
@@ -20,8 +20,11 @@ public class TripDTO {
     private double realFuelConsumption;
     private String comment;
     private long vehicleId;
+    private String vehiclePlateNumbers;
     private long firstDriverId;
+    private String firstDriverName;
     private long secondDriverId;
+    private String secondDriverName;
     private long startingMeasurmentId;
     private long endingMeasurmentId;
 }

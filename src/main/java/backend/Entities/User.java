@@ -14,6 +14,7 @@ public class User {
     private UserRole userRoleByUserRoleId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;

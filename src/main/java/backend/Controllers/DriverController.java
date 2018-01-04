@@ -21,20 +21,20 @@ public class DriverController {
         this.driverService = driverService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @GetMapping(value = "/drivers")
     public ResponseEntity<List<DriverDTO>> getDrivers() {
         return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PostMapping(value = "/driver/add")
     public ResponseEntity<List<DriverDTO>> addDriver(@RequestBody Driver driver) {
         HttpStatus responseStatus = driverService.addDriver(driver);
         return new ResponseEntity<>(driverService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PutMapping(value = "/driver/update")
     public ResponseEntity<List<DriverDTO>> updateDriver(@RequestBody Driver driver) {
         HttpStatus responseStatus = driverService.updateDriver(driver);

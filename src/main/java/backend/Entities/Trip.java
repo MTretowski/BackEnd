@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @Entity
 public class Trip {
     private long id;
-    private String businnesTripNumber;
+    private String businessTripNumber;
     private Timestamp startDate;
     private Timestamp endDate;
     private double distance;
@@ -37,13 +37,13 @@ public class Trip {
     }
 
     @Basic
-    @Column(name = "businnes_trip_number")
-    public String getBusinnesTripNumber() {
-        return businnesTripNumber;
+    @Column(name = "business_trip_number")
+    public String getBusinessTripNumber() {
+        return businessTripNumber;
     }
 
-    public void setBusinnesTripNumber(String businnesTripNumber) {
-        this.businnesTripNumber = businnesTripNumber;
+    public void setBusinessTripNumber(String businessTripNumber) {
+        this.businessTripNumber = businessTripNumber;
     }
 
     @Basic

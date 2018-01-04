@@ -21,27 +21,27 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @GetMapping(value = "/trips")
     public ResponseEntity<List<TripDTO>> getTrips(){
         return new ResponseEntity<>(tripService.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PostMapping(value = "/trip/add")
     public ResponseEntity<List<TripDTO>> addTrip(@RequestBody Trip trip){
         HttpStatus responseStatus = tripService.addTrip(trip);
         return new ResponseEntity<>(tripService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PutMapping(value = "/trip/update")
     public ResponseEntity<List<TripDTO>> updateTrip(@RequestBody Trip trip){
         HttpStatus responseStatus = tripService.updateTrip(trip);
         return new ResponseEntity<>(tripService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @DeleteMapping(value = "/trip/delete")
     public ResponseEntity<List<TripDTO>> updateTrip(@RequestBody long id){
         tripService.deleteTrip(id);

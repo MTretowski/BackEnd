@@ -21,27 +21,27 @@ public class MeasurmentController {
         this.measurmentService = measurmentService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @GetMapping(value = "/measurments")
     public ResponseEntity<List<MeasurmentDTO>> getMeasurments(){
         return new ResponseEntity<>(measurmentService.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PostMapping(value = "/measurment/add")
     public ResponseEntity<List<MeasurmentDTO>> addMeasurments(@RequestBody Measurment measurment){
         HttpStatus responseStatus = measurmentService.addMeasurment(measurment);
         return new ResponseEntity<>(measurmentService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PutMapping(value = "/measurment/update")
     public ResponseEntity<List<MeasurmentDTO>> updateMeasurments(@RequestBody Measurment measurment){
         HttpStatus responseStatus = measurmentService.updateMeasurment(measurment);
         return new ResponseEntity<>(measurmentService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @DeleteMapping(value = "/measurment/delete")
     public ResponseEntity<List<MeasurmentDTO>> deleteMeasurments(@RequestBody long id){
         HttpStatus responseStatus = measurmentService.deleteMeasurment(id);

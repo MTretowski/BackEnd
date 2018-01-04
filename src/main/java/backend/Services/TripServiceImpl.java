@@ -2,7 +2,9 @@ package backend.Services;
 
 import backend.DTOs.TripDTO;
 import backend.Entities.Trip;
+import backend.Repositories.DriverRepository;
 import backend.Repositories.TripRepository;
+import backend.Repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,14 @@ import java.util.List;
 public class TripServiceImpl implements TripService {
 
     private TripRepository tripRepository;
+    private VehicleRepository vehicleRepository;
+    private DriverRepository driverRepository;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository) {
+    public TripServiceImpl(TripRepository tripRepository, VehicleRepository vehicleRepository, DriverRepository driverRepository) {
         this.tripRepository = tripRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.driverRepository = driverRepository;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class TripServiceImpl implements TripService {
         for (Trip trip : tripsInDatabase) {
             tripDTOS.add(new TripDTO(
                     trip.getId(),
-                    trip.getBusinnesTripNumber(),
+                    trip.getBusinessTripNumber(),
                     trip.getStartDate(),
                     trip.getEndDate(),
                     trip.getDistance(),
@@ -41,13 +47,24 @@ public class TripServiceImpl implements TripService {
                     trip.getRealFuelConsumption(),
                     trip.getComment(),
                     trip.getVehicleId(),
+                    vehicleRepository.findById(trip.getVehicleId()).getPlateNumbers(),
                     trip.getFirstDriverId(),
+                    (driverRepository.findById(trip.getFirstDriverId()).getFirstName() + " " + driverRepository.findById(trip.getFirstDriverId()).getLastName()),
                     trip.getFirstDriverId(),
+                    getSecondDriverName(trip),
                     trip.getStartingMeasurmentId(),
                     trip.getEndingMeasurmentId()
             ));
         }
         return tripDTOS;
+    }
+
+    private String getSecondDriverName(Trip trip) {
+        if (driverRepository.findById(trip.getSecondDriverId()) == null) {
+            return "";
+        } else {
+            return driverRepository.findById(trip.getSecondDriverId()).getFirstName() + " " + driverRepository.findById(trip.getSecondDriverId()).getLastName();
+        }
     }
 
     @Override

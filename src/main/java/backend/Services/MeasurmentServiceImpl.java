@@ -61,7 +61,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         if (trip == null) {
             return "";
         } else {
-            return trip.getBusinnesTripNumber();
+            return trip.getBusinessTripNumber();
         }
     }
 
@@ -70,7 +70,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         if (trip == null) {
             return "";
         } else {
-            return trip.getBusinnesTripNumber();
+            return trip.getBusinessTripNumber();
         }
     }
 

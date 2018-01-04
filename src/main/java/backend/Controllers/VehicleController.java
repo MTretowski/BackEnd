@@ -21,20 +21,20 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @GetMapping(value = "/vehicles")
     public ResponseEntity<List<VehicleDTO>> getVehicles(){
         return new ResponseEntity<>(vehicleService.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PostMapping(value = "/vehicle/add")
     public ResponseEntity<List<VehicleDTO>> addVehicle(@RequestBody Vehicle vehicle){
         HttpStatus responseStatus = vehicleService.addVehicle(vehicle);
         return new ResponseEntity<>(vehicleService.findAll(), responseStatus);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
+
     @PutMapping(value = "/vehicle/update")
     public ResponseEntity<List<VehicleDTO>> updateVehicle(@RequestBody Vehicle vehicle){
         HttpStatus responseStatus = vehicleService.updateVehicle(vehicle);
