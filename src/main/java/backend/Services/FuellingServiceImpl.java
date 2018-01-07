@@ -1,6 +1,7 @@
 package backend.Services;
 
 import backend.DTOs.FuellingDTO;
+import backend.DTOs.ImportedFuellingDTO;
 import backend.Entities.Fuelling;
 import backend.Repositories.FuellingRepository;
 import backend.Repositories.SupplierRepository;
@@ -76,34 +77,47 @@ public class FuellingServiceImpl implements FuellingService {
     }
 
     @Override
-    public List<List<FuellingDTO>> importFuellings(List<Fuelling> fuellings) {
+    public List<List<FuellingDTO>> importFuellings(List<ImportedFuellingDTO> fuellings) {
 
         List<FuellingDTO> successfullyImportedFuellings = new ArrayList<>();
         List<FuellingDTO> unsuccessfullyImportedFuellings = new ArrayList<>();
         FuellingDTO fuellingDTO;
+        Fuelling fuelling;
+        List<Fuelling> fuellingsToSaveInDatabase = new ArrayList<>();
 
-        for (Fuelling fuelling : fuellings) {
+        for (ImportedFuellingDTO importedFuelling : fuellings) {
+
             fuellingDTO = new FuellingDTO(
                     0,
-                    fuelling.getAmount(),
-                    fuelling.getGrossValue(),
-                    fuelling.getCurrency(),
-                    fuelling.getDate(),
-                    fuelling.getSupplierId(),
-                    supplierRepository.findById(fuelling.getSupplierId()).getName(),
-                    fuelling.getVehicleId(),
-                    vehicleRepository.findById(fuelling.getVehicleId()).getPlateNumbers()
+                    importedFuelling.getAmount(),
+                    importedFuelling.getGrossValue(),
+                    importedFuelling.getCurrency(),
+                    importedFuelling.getDate(),
+                    supplierRepository.findByName(importedFuelling.getSupplier()).getId(),
+                    supplierRepository.findByName(importedFuelling.getSupplier()).getName(),
+                    importedFuelling.getVehicleId(),
+                    vehicleRepository.findById(importedFuelling.getVehicleId()).getPlateNumbers()
             );
+            fuelling = new Fuelling();
+            fuelling.setAmount(importedFuelling.getAmount());
+            fuelling.setGrossValue(importedFuelling.getGrossValue());
+            fuelling.setCurrency(importedFuelling.getCurrency());
+            fuelling.setDate(importedFuelling.getDate());
+            fuelling.setSupplierId(supplierRepository.findByName(importedFuelling.getSupplier()).getId());
+            fuelling.setVehicleId(importedFuelling.getVehicleId());
+
             if (fuellingRepository.findByDateAndVehicleIdAndAmount(fuelling.getDate(), fuelling.getVehicleId(), fuelling.getAmount()) != null) {
                 unsuccessfullyImportedFuellings.add(fuellingDTO);
             } else {
-                fuellingRepository.save(fuelling);
+                fuellingsToSaveInDatabase.add(fuelling);
                 successfullyImportedFuellings.add(fuellingDTO);
             }
         }
-        List<List<FuellingDTO>> importSummary = new ArrayList<>(2);
+        fuellingRepository.save(fuellingsToSaveInDatabase);
+        List<List<FuellingDTO>> importSummary = new ArrayList<>(3);
         importSummary.add(successfullyImportedFuellings);
         importSummary.add(unsuccessfullyImportedFuellings);
+        importSummary.add(findAll());
 
         return importSummary;
     }

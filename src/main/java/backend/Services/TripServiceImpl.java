@@ -48,10 +48,8 @@ public class TripServiceImpl implements TripService {
                     trip.getComment(),
                     trip.getVehicleId(),
                     vehicleRepository.findById(trip.getVehicleId()).getPlateNumbers(),
-                    trip.getFirstDriverId(),
-                    (driverRepository.findById(trip.getFirstDriverId()).getFirstName() + " " + driverRepository.findById(trip.getFirstDriverId()).getLastName()),
-                    trip.getFirstDriverId(),
-                    getSecondDriverName(trip),
+                    trip.getDriverId(),
+                    (driverRepository.findById(trip.getDriverId()).getFirstName() + " " + driverRepository.findById(trip.getDriverId()).getLastName()),
                     trip.getStartingMeasurmentId(),
                     trip.getEndingMeasurmentId()
             ));
@@ -59,17 +57,13 @@ public class TripServiceImpl implements TripService {
         return tripDTOS;
     }
 
-    private String getSecondDriverName(Trip trip) {
-        if (driverRepository.findById(trip.getSecondDriverId()) == null) {
-            return "";
-        } else {
-            return driverRepository.findById(trip.getSecondDriverId()).getFirstName() + " " + driverRepository.findById(trip.getSecondDriverId()).getLastName();
-        }
-    }
-
     @Override
     public HttpStatus addTrip(Trip trip) {
         List<Trip> tripsInDatabase = tripRepository.findAllByVehicleId(trip.getVehicleId());
+        if(tripsInDatabase.size() == 0){
+            tripRepository.save(trip);
+            return HttpStatus.OK;
+        }
         for (Trip tripInDatabase : tripsInDatabase) {
             if (checkTripDates(tripInDatabase, trip)) {
                 tripRepository.save(trip);

@@ -25,34 +25,33 @@ public class UserController {
 
 
     @GetMapping(value = "/users")
-    public ResponseEntity<List<UserDTO>> getUsers(){
+    public ResponseEntity<List<UserDTO>> getUsers() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/user/add")
-    public ResponseEntity<List<UserDTO>> addUser(@RequestBody User user){
+    public ResponseEntity<List<UserDTO>> addUser(@RequestBody User user) {
         HttpStatus responseStatus = userService.addUser(user);
         return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
 
     @PutMapping(value = "/user/update")
-    public ResponseEntity<List<UserDTO>> updateUser(@RequestBody User user){
-        HttpStatus responseStatus = userService.updateUser(user);
+    public ResponseEntity<List<UserDTO>> updateUser(@RequestBody UserDTO userDTO) {
+        HttpStatus responseStatus = userService.updateUser(userDTO);
         return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
 
-    @PostMapping(value = "/user/resetPassword")
-    public ResponseEntity<List<UserDTO>> resetPassword(@RequestBody ResetPasswordFormDTO resetPasswordFormDTO){
+    @PutMapping(value = "/user/resetPassword")
+    public ResponseEntity<List<UserDTO>> resetPassword(@RequestBody ResetPasswordFormDTO resetPasswordFormDTO) {
         HttpStatus responseStatus = userService.resetPassword(resetPasswordFormDTO);
         return new ResponseEntity<>(userService.findAll(), responseStatus);
     }
 
-
-    @PostMapping(value = "/user/updatePassword")
-    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordFormDTO updatePasswordFormDTO){
+    @PutMapping(value = "/user/updatePassword")
+    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordFormDTO updatePasswordFormDTO) {
         return new ResponseEntity<>(userService.updatePassword(updatePasswordFormDTO));
     }
 }

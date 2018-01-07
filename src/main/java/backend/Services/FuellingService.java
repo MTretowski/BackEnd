@@ -1,6 +1,7 @@
 package backend.Services;
 
 import backend.DTOs.FuellingDTO;
+import backend.DTOs.ImportedFuellingDTO;
 import backend.Entities.Fuelling;
 import org.springframework.http.HttpStatus;
 
@@ -16,5 +17,5 @@ public interface FuellingService {
 
     void deleteFuelling(long id);
 
-    List<List<FuellingDTO>> importFuellings(List<Fuelling> fuellings);
+    List<List<FuellingDTO>> importFuellings(List<ImportedFuellingDTO> fuellings);
 }

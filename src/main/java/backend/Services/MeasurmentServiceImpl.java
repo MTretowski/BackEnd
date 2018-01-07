@@ -6,13 +6,13 @@ import backend.Entities.Trip;
 import backend.Repositories.MeasurmentRepository;
 import backend.Repositories.TripRepository;
 import backend.Repositories.VehicleRepository;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,7 +38,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         for (Measurment measurment : measurmentsInDatabase) {
             measurmentDTOS.add(new MeasurmentDTO(
                     measurment.getId(),
-                    measurment.getDate(),
+                    new Date(measurment.getDate().getTime()),
                     measurment.getLeftFuelTank(),
                     measurment.getRightFuelTank(),
                     calculateLeftFuelTankAmount(measurment),
@@ -46,6 +46,7 @@ public class MeasurmentServiceImpl implements MeasurmentService {
                     measurment.isManualMeasurment(),
                     measurment.isReturnToFull(),
                     measurment.isMeasuredAmount(),
+                    getMeasurmentWay(measurment),
                     measurment.getVehicleId(),
                     vehicleRepository.findById(measurment.getVehicleId()).getPlateNumbers(),
                     getStartedTrip(measurment.getId()),
@@ -54,6 +55,18 @@ public class MeasurmentServiceImpl implements MeasurmentService {
         }
 
         return measurmentDTOS;
+    }
+
+    private String getMeasurmentWay(Measurment measurment){
+        if(measurment.isManualMeasurment()){
+            return "manualMeasurment";
+        }
+        else if(measurment.isReturnToFull()){
+            return "returnToFull";
+        }
+        else{
+            return "measuredAmount";
+        }
     }
 
     private String getStartedTrip(long id) {

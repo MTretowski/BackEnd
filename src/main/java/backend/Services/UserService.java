@@ -14,7 +14,7 @@ public interface UserService {
 
     HttpStatus addUser(User user);
 
-    HttpStatus updateUser(User user);
+    HttpStatus updateUser(UserDTO userDTO);
 
     HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO);
 

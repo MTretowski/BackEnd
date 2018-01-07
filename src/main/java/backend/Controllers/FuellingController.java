@@ -1,6 +1,7 @@
 package backend.Controllers;
 
 import backend.DTOs.FuellingDTO;
+import backend.DTOs.ImportedFuellingDTO;
 import backend.Entities.Fuelling;
 import backend.Services.FuellingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +43,15 @@ public class FuellingController {
     }
 
 
-    @DeleteMapping(value = "/fuelling/delete")
-    public ResponseEntity<List<FuellingDTO>> deleteFuelling(@RequestBody long id){
+    @DeleteMapping(value = "/fuelling/delete/{id}")
+    public ResponseEntity<List<FuellingDTO>> deleteFuelling(@PathVariable long id){
         fuellingService.deleteFuelling(id);
         return new ResponseEntity<>(fuellingService.findAll(), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/fuelling/import")
-    public ResponseEntity<List<List<FuellingDTO>>> importFuelling(@RequestBody List<Fuelling> fuellings){
+    public ResponseEntity<List<List<FuellingDTO>>> importFuelling(@RequestBody List<ImportedFuellingDTO> fuellings){
         return new ResponseEntity<>(fuellingService.importFuellings(fuellings), HttpStatus.OK);
     }
 }

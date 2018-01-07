@@ -54,7 +54,13 @@ public class DriverServiceImpl implements DriverService {
         if (driverRepository.findById(driver.getId()) == null) {
             return HttpStatus.CONFLICT;
         } else {
-            return addDriver(driver);
+            Driver driverTemp = driverRepository.findByFirstNameAndLastName(driver.getFirstName(), driver.getFirstName());
+            if (driverTemp == null || driverTemp.getId() == driver.getId()) {
+                driverRepository.save(driver);
+                return HttpStatus.OK;
+            } else {
+                return HttpStatus.CONFLICT;
+            }
         }
     }
 }

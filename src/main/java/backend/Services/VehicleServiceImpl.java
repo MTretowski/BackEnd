@@ -58,8 +58,14 @@ public class VehicleServiceImpl implements VehicleService {
         if (vehicleRepository.findById(vehicle.getId()) == null) {
             return HttpStatus.CONFLICT;
         } else {
-            vehicleRepository.save(vehicle);
-            return HttpStatus.OK;
+            Vehicle tempVehicle = vehicleRepository.findByPlateNumbers(vehicle.getPlateNumbers());
+            if(tempVehicle == null || tempVehicle.getId() == vehicle.getId()) {
+                vehicleRepository.save(vehicle);
+                return HttpStatus.OK;
+            }
+            else{
+                return HttpStatus.CONFLICT;
+            }
         }
     }
 }

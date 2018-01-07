@@ -13,6 +13,4 @@ public class UserDTO {
     private String username;
     private boolean active;
     private long userRoleId;
-    private String userRole;
-
 }

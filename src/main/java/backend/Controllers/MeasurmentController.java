@@ -42,8 +42,8 @@ public class MeasurmentController {
     }
 
 
-    @DeleteMapping(value = "/measurment/delete")
-    public ResponseEntity<List<MeasurmentDTO>> deleteMeasurments(@RequestBody long id){
+    @DeleteMapping(value = "/measurment/delete/{id}")
+    public ResponseEntity<List<MeasurmentDTO>> deleteMeasurments(@PathVariable long id){
         HttpStatus responseStatus = measurmentService.deleteMeasurment(id);
         return new ResponseEntity<>(measurmentService.findAll(), responseStatus);
     }

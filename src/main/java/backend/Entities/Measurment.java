@@ -19,7 +19,6 @@ public class Measurment {
     private Collection<Trip> tripsById_0;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;

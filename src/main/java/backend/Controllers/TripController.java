@@ -42,8 +42,8 @@ public class TripController {
     }
 
 
-    @DeleteMapping(value = "/trip/delete")
-    public ResponseEntity<List<TripDTO>> updateTrip(@RequestBody long id){
+    @DeleteMapping(value = "/trip/delete/{id}")
+    public ResponseEntity<List<TripDTO>> updateTrip(@PathVariable long id){
         tripService.deleteTrip(id);
         return new ResponseEntity<>(tripService.findAll(), HttpStatus.OK);
     }

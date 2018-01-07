@@ -44,8 +44,7 @@ public class UserServiceImpl implements UserService {
                     user.getLastName(),
                     user.getUsername(),
                     user.isActive(),
-                    user.getUserRoleId(),
-                    user.getUserRoleByUserRoleId().getName()
+                    user.getUserRoleId()
             ));
         }
         return userDTOS;
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HttpStatus addUser(User user) {
-        user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
+        //user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return HttpStatus.CONFLICT;
         } else {
@@ -64,13 +63,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HttpStatus updateUser(User user) {
-        user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
-        if (userRepository.findById(user.getId()) == null) {
+    public HttpStatus updateUser(UserDTO userDTO) {
+        if (userRepository.findById(userDTO.getId()) == null) {
             return HttpStatus.CONFLICT;
         } else {
-            userRepository.save(user);
-            return HttpStatus.OK;
+
+            User user = userRepository.findByUsername(userDTO.getUsername());
+
+            if (user == null || user.getId() != userDTO.getId()) {
+                return HttpStatus.CONFLICT;
+            } else {
+                user.setId(userDTO.getId());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                user.setUsername(userDTO.getUsername());
+                user.setPassword(userRepository.findById(userDTO.getId()).getPassword());
+                user.setActive(userDTO.isActive());
+                user.setUserRoleId(userDTO.getUserRoleId());
+                userRepository.save(user);
+                return HttpStatus.OK;
+            }
         }
     }
 

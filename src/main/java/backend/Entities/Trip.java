@@ -16,15 +16,13 @@ public class Trip {
     private double realFuelConsumption;
     private String comment;
     private long vehicleId;
-    private long firstDriverId;
-    private long secondDriverId;
     private long startingMeasurmentId;
     private long endingMeasurmentId;
+    private long driverId;
     private Vehicle vehicleByVehicleId;
-    private Driver driverByFirstDriverId;
-    private Driver driverBySecondDriverId;
     private Measurment measurmentByStartingMeasurmentId;
     private Measurment measurmentByEndingMeasurmentId;
+    private Driver driverByDriverId;
 
     @Id
     @Column(name = "id")
@@ -137,26 +135,6 @@ public class Trip {
     }
 
     @Basic
-    @Column(name = "first_driver_id")
-    public long getFirstDriverId() {
-        return firstDriverId;
-    }
-
-    public void setFirstDriverId(long firstDriverId) {
-        this.firstDriverId = firstDriverId;
-    }
-
-    @Basic
-    @Column(name = "second_driver_id")
-    public long getSecondDriverId() {
-        return secondDriverId;
-    }
-
-    public void setSecondDriverId(long secondDriverId) {
-        this.secondDriverId = secondDriverId;
-    }
-
-    @Basic
     @Column(name = "starting_measurment_id")
     public long getStartingMeasurmentId() {
         return startingMeasurmentId;
@@ -176,6 +154,16 @@ public class Trip {
         this.endingMeasurmentId = endingMeasurmentId;
     }
 
+    @Basic
+    @Column(name = "driver_id")
+    public long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(long driverId) {
+        this.driverId = driverId;
+    }
+
     @ManyToOne
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Vehicle getVehicleByVehicleId() {
@@ -184,26 +172,6 @@ public class Trip {
 
     public void setVehicleByVehicleId(Vehicle vehicleByVehicleId) {
         this.vehicleByVehicleId = vehicleByVehicleId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "first_driver_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public Driver getDriverByFirstDriverId() {
-        return driverByFirstDriverId;
-    }
-
-    public void setDriverByFirstDriverId(Driver driverByFirstDriverId) {
-        this.driverByFirstDriverId = driverByFirstDriverId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "second_driver_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public Driver getDriverBySecondDriverId() {
-        return driverBySecondDriverId;
-    }
-
-    public void setDriverBySecondDriverId(Driver driverBySecondDriverId) {
-        this.driverBySecondDriverId = driverBySecondDriverId;
     }
 
     @ManyToOne
@@ -224,5 +192,15 @@ public class Trip {
 
     public void setMeasurmentByEndingMeasurmentId(Measurment measurmentByEndingMeasurmentId) {
         this.measurmentByEndingMeasurmentId = measurmentByEndingMeasurmentId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Driver getDriverByDriverId() {
+        return driverByDriverId;
+    }
+
+    public void setDriverByDriverId(Driver driverByDriverId) {
+        this.driverByDriverId = driverByDriverId;
     }
 }

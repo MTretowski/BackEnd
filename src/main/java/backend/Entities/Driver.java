@@ -10,10 +10,8 @@ public class Driver {
     private String lastName;
     private boolean active;
     private Collection<Trip> tripsById;
-    private Collection<Trip> tripsById_0;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;
@@ -53,21 +51,12 @@ public class Driver {
         this.active = active;
     }
 
-    @OneToMany(mappedBy = "driverByFirstDriverId")
+    @OneToMany(mappedBy = "driverByDriverId")
     public Collection<Trip> getTripsById() {
         return tripsById;
     }
 
     public void setTripsById(Collection<Trip> tripsById) {
         this.tripsById = tripsById;
-    }
-
-    @OneToMany(mappedBy = "driverBySecondDriverId")
-    public Collection<Trip> getTripsById_0() {
-        return tripsById_0;
-    }
-
-    public void setTripsById_0(Collection<Trip> tripsById_0) {
-        this.tripsById_0 = tripsById_0;
     }
 }

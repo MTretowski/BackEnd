@@ -21,10 +21,8 @@ public class TripDTO {
     private String comment;
     private long vehicleId;
     private String vehiclePlateNumbers;
-    private long firstDriverId;
-    private String firstDriverName;
-    private long secondDriverId;
-    private String secondDriverName;
+    private long driverId;
+    private String driverName;
     private long startingMeasurmentId;
     private long endingMeasurmentId;
 }
