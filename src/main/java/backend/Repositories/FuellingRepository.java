@@ -12,7 +12,7 @@ public interface FuellingRepository extends CrudRepository<Fuelling, Long> {
 
     List<Fuelling> findAll();
 
-    Fuelling findByDateAndVehicleIdAndAmount (Timestamp date, long id, Double amount);
+    Fuelling findByDateAndVehicleId (Timestamp date, long id);
 
     Fuelling findById(long id);
 

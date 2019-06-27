@@ -1,5 +1,6 @@
 package backend.Services;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.ResetPasswordFormDTO;
 import backend.DTOs.UpdatePasswordFormDTO;
 import backend.DTOs.UserDTO;
@@ -7,7 +8,6 @@ import backend.Entities.User;
 import backend.Repositories.UserRepository;
 import backend.Repositories.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -51,28 +51,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HttpStatus addUser(User user) {
-        //user.setUserRoleByUserRoleId(userRoleRepository.findById(user.getUserRoleId()));
+    public ErrorMessageDTO addUser(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("W bazie danych znaleziono użytkownika o takim samym loginie.");
         } else {
             user.setPassword(hashpw(user.getPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
             userRepository.save(user);
-            return HttpStatus.OK;
+            return null;
         }
     }
 
     @Override
-    public HttpStatus updateUser(UserDTO userDTO) {
+    public ErrorMessageDTO updateUser(UserDTO userDTO) {
         if (userRepository.findById(userDTO.getId()) == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono użytkownika podanym identyfikatorze - prawdopodobnie został usunięty. Odśwież aplikację i spróbuj ponownie.");
         } else {
-
-            User user = userRepository.findByUsername(userDTO.getUsername());
-
-            if (user == null || user.getId() != userDTO.getId()) {
-                return HttpStatus.CONFLICT;
-            } else {
+            User userTemp = userRepository.findByUsername(userDTO.getUsername());
+            if (userTemp == null || userTemp.getId() == userDTO.getId()) {
+                User user = new User();
                 user.setId(userDTO.getId());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
@@ -81,36 +77,52 @@ public class UserServiceImpl implements UserService {
                 user.setActive(userDTO.isActive());
                 user.setUserRoleId(userDTO.getUserRoleId());
                 userRepository.save(user);
-                return HttpStatus.OK;
+                return null;
+            } else {
+                return new ErrorMessageDTO("W bazie danych znaleziono użytkownika o takim samym loginie.");
             }
         }
     }
 
     @Override
-    public HttpStatus updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO) {
+    public ErrorMessageDTO updatePassword(UpdatePasswordFormDTO updatePasswordFormDTO) {
         User user = userRepository.findById(updatePasswordFormDTO.getUserId());
         if (user == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono użytkownika podanym identyfikatorze - prawdopodobnie został usunięty. Odśwież aplikację i spróbuj ponownie.");
         } else {
             if (!checkpw(updatePasswordFormDTO.getOldPassword(), user.getPassword())) {
-                return HttpStatus.CONFLICT;
+                return new ErrorMessageDTO("Podane stare hasło jest błędne.");
             } else {
                 user.setPassword(hashpw(updatePasswordFormDTO.getNewPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
                 userRepository.save(user);
-                return HttpStatus.OK;
+                return null;
             }
         }
     }
 
     @Override
-    public HttpStatus resetPassword(ResetPasswordFormDTO resetPasswordFormDTO) {
+    public ErrorMessageDTO resetPassword(ResetPasswordFormDTO resetPasswordFormDTO) {
         User user = userRepository.findById(resetPasswordFormDTO.getUserId());
         if (user == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono użytkownika podanym identyfikatorze - prawdopodobnie został usunięty. Odśwież aplikację i spróbuj ponownie.");
         } else {
             user.setPassword(hashpw(resetPasswordFormDTO.getNewPassword(), "$2a$10$251BUgwQV7l/3xVGpEIYbu"));
             userRepository.save(user);
-            return HttpStatus.OK;
+            return null;
         }
+    }
+
+    @Override
+    public UserDTO findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        UserDTO userDTO = new UserDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.isActive(),
+                user.getUserRoleId()
+        );
+        return userDTO;
     }
 }

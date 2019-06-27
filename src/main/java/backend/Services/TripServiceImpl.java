@@ -1,12 +1,12 @@
 package backend.Services;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.TripDTO;
 import backend.Entities.Trip;
 import backend.Repositories.DriverRepository;
 import backend.Repositories.TripRepository;
 import backend.Repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -58,28 +58,43 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public HttpStatus addTrip(Trip trip) {
+    public ErrorMessageDTO addTrip(Trip trip) {
         List<Trip> tripsInDatabase = tripRepository.findAllByVehicleId(trip.getVehicleId());
-        if(tripsInDatabase.size() == 0){
+        if (tripsInDatabase.size() == 0) {
             tripRepository.save(trip);
-            return HttpStatus.OK;
-        }
-        for (Trip tripInDatabase : tripsInDatabase) {
-            if (checkTripDates(tripInDatabase, trip)) {
-                tripRepository.save(trip);
-                return HttpStatus.OK;
+            return null;
+        } else {
+            for (Trip tripInDatabase : tripsInDatabase) {
+                if (!checkTripDates(tripInDatabase, trip)) {
+                    return new ErrorMessageDTO("W bazie danych odnaleziono trasę tego pojazdu, której czas trwania pokrywa się z okresem trwania dodawanej trasy.");
+                }
             }
+            tripRepository.save(trip);
+            return null;
         }
-        return HttpStatus.CONFLICT;
+
     }
 
     @Override
-    public HttpStatus updateTrip(Trip trip) {
+    public ErrorMessageDTO updateTrip(Trip trip) {
         if (tripRepository.findById(trip.getId()) == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono trasy o podanym identyfikatorze - prawdopodobnie została usunięta. Odśwież aplikację i spróbuj ponownie.");
         } else {
-            tripRepository.save(trip);
-            return HttpStatus.OK;
+            List<Trip> tripsInDatabase = tripRepository.findAllByVehicleId(trip.getVehicleId());
+            if (tripsInDatabase.size() == 0) {
+                tripRepository.save(trip);
+                return null;
+            } else {
+                for (Trip tripInDatabase : tripsInDatabase) {
+                    if (!checkTripDates(tripInDatabase, trip)) {
+                        if (tripInDatabase.getId() != trip.getId()) {
+                            return new ErrorMessageDTO("W bazie danych odnaleziono trasę tego pojazdu, której czas trwania pokrywa się z okresem trwania dodawanej trasy.");
+                        }
+                    }
+                }
+                tripRepository.save(trip);
+                return null;
+            }
         }
     }
 
