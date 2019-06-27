@@ -30,6 +30,10 @@ public class FuellingServiceImpl implements FuellingService {
         this.vehicleRepository = vehicleRepository;
     }
 
+    private void test(){
+        System.out.println("test");
+    }
+
     @Override
     public List<FuellingDTO> findAll() {
         List<Fuelling> fuellingsInDatabase = fuellingRepository.findAll();
