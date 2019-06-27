@@ -1,10 +1,10 @@
 package backend.Services;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.VehicleDTO;
 import backend.Entities.Vehicle;
 import backend.Repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -44,27 +44,27 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public HttpStatus addVehicle(Vehicle vehicle) {
+    public ErrorMessageDTO addVehicle(Vehicle vehicle) {
         if (vehicleRepository.findByPlateNumbers(vehicle.getPlateNumbers()) != null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("W bazie danych znaleziono pojazd o takim samym numerze rejestracyjnym.");
         } else {
             vehicleRepository.save(vehicle);
-            return HttpStatus.OK;
+            return null;
         }
     }
 
     @Override
-    public HttpStatus updateVehicle(Vehicle vehicle) {
+    public ErrorMessageDTO updateVehicle(Vehicle vehicle) {
         if (vehicleRepository.findById(vehicle.getId()) == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono pojazdu o podanym identyfikatorze - prawdopodobnie został usunięty. Odśwież aplikację i spróbuj ponownie.");
         } else {
             Vehicle tempVehicle = vehicleRepository.findByPlateNumbers(vehicle.getPlateNumbers());
             if(tempVehicle == null || tempVehicle.getId() == vehicle.getId()) {
                 vehicleRepository.save(vehicle);
-                return HttpStatus.OK;
+                return null;
             }
             else{
-                return HttpStatus.CONFLICT;
+                return new ErrorMessageDTO("W bazie danych znaleziono pojazd o takim samym numerze rejestracyjnym.");
             }
         }
     }

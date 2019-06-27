@@ -1,13 +1,14 @@
 package backend.Services;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.FuellingDTO;
 import backend.DTOs.ImportedFuellingDTO;
 import backend.Entities.Fuelling;
 import backend.Repositories.FuellingRepository;
 import backend.Repositories.SupplierRepository;
 import backend.Repositories.VehicleRepository;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -52,22 +53,28 @@ public class FuellingServiceImpl implements FuellingService {
     }
 
     @Override
-    public HttpStatus addFuelling(Fuelling fuelling) {
-        if (fuellingRepository.findByDateAndVehicleIdAndAmount(fuelling.getDate(), fuelling.getVehicleId(), fuelling.getAmount()) != null) {
-            return HttpStatus.CONFLICT;
+    public ErrorMessageDTO addFuelling(Fuelling fuelling) {
+        if (fuellingRepository.findByDateAndVehicleId(fuelling.getDate(), fuelling.getVehicleId()) != null) {
+            return new ErrorMessageDTO("W bazie danych zostało znalezione takie tankowanie.");
         } else {
             fuellingRepository.save(fuelling);
-            return HttpStatus.OK;
+            return null;
         }
     }
 
     @Override
-    public HttpStatus updateFuelling(Fuelling fuelling) {
+    public ErrorMessageDTO updateFuelling(Fuelling fuelling) {
         if (fuellingRepository.findById(fuelling.getId()) == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono tankowania o podanym identyfikatorze - prawdopodobnie zostało usunięte. Odśwież aplikację i spróbuj ponownie.");
         } else {
-            fuellingRepository.save(fuelling);
-            return HttpStatus.OK;
+            Fuelling fuellingTemp = fuellingRepository.findByDateAndVehicleId(fuelling.getDate(), fuelling.getVehicleId());
+            if(fuellingTemp == null || fuelling.getId() == fuellingTemp.getId()) {
+                fuellingRepository.save(fuelling);
+                return null;
+            }
+            else{
+                return new ErrorMessageDTO("W bazie danych zostało znalezione takie tankowanie.");
+            }
         }
     }
 
@@ -83,14 +90,13 @@ public class FuellingServiceImpl implements FuellingService {
         List<FuellingDTO> unsuccessfullyImportedFuellings = new ArrayList<>();
         FuellingDTO fuellingDTO;
         Fuelling fuelling;
-        List<Fuelling> fuellingsToSaveInDatabase = new ArrayList<>();
 
         for (ImportedFuellingDTO importedFuelling : fuellings) {
 
             fuellingDTO = new FuellingDTO(
                     0,
-                    importedFuelling.getAmount(),
-                    importedFuelling.getGrossValue(),
+                    Precision.round(importedFuelling.getAmount(),2),
+                    Precision.round(importedFuelling.getGrossValue(),2),
                     importedFuelling.getCurrency(),
                     importedFuelling.getDate(),
                     supplierRepository.findByName(importedFuelling.getSupplier()).getId(),
@@ -99,21 +105,21 @@ public class FuellingServiceImpl implements FuellingService {
                     vehicleRepository.findById(importedFuelling.getVehicleId()).getPlateNumbers()
             );
             fuelling = new Fuelling();
-            fuelling.setAmount(importedFuelling.getAmount());
-            fuelling.setGrossValue(importedFuelling.getGrossValue());
+            fuelling.setAmount(Precision.round(importedFuelling.getAmount(),2));
+            fuelling.setGrossValue(Precision.round(importedFuelling.getGrossValue(),2));
             fuelling.setCurrency(importedFuelling.getCurrency());
             fuelling.setDate(importedFuelling.getDate());
             fuelling.setSupplierId(supplierRepository.findByName(importedFuelling.getSupplier()).getId());
             fuelling.setVehicleId(importedFuelling.getVehicleId());
 
-            if (fuellingRepository.findByDateAndVehicleIdAndAmount(fuelling.getDate(), fuelling.getVehicleId(), fuelling.getAmount()) != null) {
+            if (fuellingRepository.findByDateAndVehicleId(importedFuelling.getDate(), importedFuelling.getVehicleId()) != null) {
                 unsuccessfullyImportedFuellings.add(fuellingDTO);
             } else {
-                fuellingsToSaveInDatabase.add(fuelling);
+                fuellingRepository.save(fuelling);
                 successfullyImportedFuellings.add(fuellingDTO);
             }
         }
-        fuellingRepository.save(fuellingsToSaveInDatabase);
+
         List<List<FuellingDTO>> importSummary = new ArrayList<>(3);
         importSummary.add(successfullyImportedFuellings);
         importSummary.add(unsuccessfullyImportedFuellings);

@@ -35,9 +35,7 @@ public class TokenAuthenticationService {
                     .getBody()
                     .getSubject();
 
-            return user != null
-                    ? new UsernamePasswordAuthenticationToken(user, null, emptyList())
-                    : null;
+            return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
         }
         return null;
     }

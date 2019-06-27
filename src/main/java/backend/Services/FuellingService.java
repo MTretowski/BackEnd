@@ -1,9 +1,9 @@
 package backend.Services;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.FuellingDTO;
 import backend.DTOs.ImportedFuellingDTO;
 import backend.Entities.Fuelling;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ public interface FuellingService {
 
     List<FuellingDTO> findAll();
 
-    HttpStatus addFuelling(Fuelling fuelling);
+    ErrorMessageDTO addFuelling(Fuelling fuelling);
 
-    HttpStatus updateFuelling(Fuelling fuelling);
+    ErrorMessageDTO updateFuelling(Fuelling fuelling);
 
     void deleteFuelling(long id);
 

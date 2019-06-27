@@ -1,10 +1,10 @@
 package backend.Services;
 
 import backend.DTOs.DriverDTO;
+import backend.DTOs.ErrorMessageDTO;
 import backend.Entities.Driver;
 import backend.Repositories.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +20,10 @@ public class DriverServiceImpl implements DriverService {
     @Autowired
     public DriverServiceImpl(DriverRepository driverRepository) {
         this.driverRepository = driverRepository;
+    }
+
+    private void test(){
+        System.out.println("test");
     }
 
     @Override
@@ -40,26 +44,26 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public HttpStatus addDriver(Driver driver) {
+    public ErrorMessageDTO addDriver(Driver driver) {
         if (driverRepository.findByFirstNameAndLastName(driver.getFirstName(), driver.getLastName()) != null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("W bazie danych został znaleziony kierowca o takim imieniu i nazwisku.");
         } else {
             driverRepository.save(driver);
-            return HttpStatus.OK;
+            return null;
         }
     }
 
     @Override
-    public HttpStatus updateDriver(Driver driver) {
+    public ErrorMessageDTO updateDriver(Driver driver) {
         if (driverRepository.findById(driver.getId()) == null) {
-            return HttpStatus.CONFLICT;
+            return new ErrorMessageDTO("Nie odnaleziono kierowcy o podanym identyfikatorze - prawdopodobnie został usunięty. Odśwież aplikację i spróbuj ponownie.");
         } else {
-            Driver driverTemp = driverRepository.findByFirstNameAndLastName(driver.getFirstName(), driver.getFirstName());
+            Driver driverTemp = driverRepository.findByFirstNameAndLastName(driver.getFirstName(), driver.getLastName());
             if (driverTemp == null || driverTemp.getId() == driver.getId()) {
                 driverRepository.save(driver);
-                return HttpStatus.OK;
+                return null;
             } else {
-                return HttpStatus.CONFLICT;
+                return new ErrorMessageDTO("W bazie danych został znaleziony kierowca o takim imieniu i nazwisku.");
             }
         }
     }

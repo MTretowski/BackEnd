@@ -1,6 +1,6 @@
 package backend.Controllers;
 
-import backend.DTOs.DriverDTO;
+import backend.DTOs.ErrorMessageDTO;
 import backend.Entities.Driver;
 import backend.Services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class DriverController {
@@ -23,21 +21,30 @@ public class DriverController {
 
 
     @GetMapping(value = "/drivers")
-    public ResponseEntity<List<DriverDTO>> getDrivers() {
+    public ResponseEntity getDrivers() {
         return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/driver/add")
-    public ResponseEntity<List<DriverDTO>> addDriver(@RequestBody Driver driver) {
-        HttpStatus responseStatus = driverService.addDriver(driver);
-        return new ResponseEntity<>(driverService.findAll(), responseStatus);
+    public ResponseEntity addDriver(@RequestBody Driver driver) {
+        ErrorMessageDTO message = driverService.addDriver(driver);
+        if (message == null) {
+            return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
+
     }
 
 
     @PutMapping(value = "/driver/update")
-    public ResponseEntity<List<DriverDTO>> updateDriver(@RequestBody Driver driver) {
-        HttpStatus responseStatus = driverService.updateDriver(driver);
-        return new ResponseEntity<>(driverService.findAll(), responseStatus);
+    public ResponseEntity updateDriver(@RequestBody Driver driver) {
+        ErrorMessageDTO message = driverService.updateDriver(driver);
+        if (message == null) {
+            return new ResponseEntity<>(driverService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
     }
 }

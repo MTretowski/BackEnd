@@ -1,5 +1,6 @@
 package backend.Controllers;
 
+import backend.DTOs.ErrorMessageDTO;
 import backend.DTOs.VehicleDTO;
 import backend.Entities.Vehicle;
 import backend.Services.VehicleServiceImpl;
@@ -17,27 +18,35 @@ public class VehicleController {
     private VehicleServiceImpl vehicleService;
 
     @Autowired
-    public VehicleController(VehicleServiceImpl vehicleService){
+    public VehicleController(VehicleServiceImpl vehicleService) {
         this.vehicleService = vehicleService;
     }
 
 
     @GetMapping(value = "/vehicles")
-    public ResponseEntity<List<VehicleDTO>> getVehicles(){
+    public ResponseEntity getVehicles() {
         return new ResponseEntity<>(vehicleService.findAll(), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/vehicle/add")
-    public ResponseEntity<List<VehicleDTO>> addVehicle(@RequestBody Vehicle vehicle){
-        HttpStatus responseStatus = vehicleService.addVehicle(vehicle);
-        return new ResponseEntity<>(vehicleService.findAll(), responseStatus);
+    public ResponseEntity addVehicle(@RequestBody Vehicle vehicle) {
+        ErrorMessageDTO message = vehicleService.addVehicle(vehicle);
+        if (message == null) {
+            return new ResponseEntity<>(vehicleService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
     }
 
 
     @PutMapping(value = "/vehicle/update")
-    public ResponseEntity<List<VehicleDTO>> updateVehicle(@RequestBody Vehicle vehicle){
-        HttpStatus responseStatus = vehicleService.updateVehicle(vehicle);
-        return new ResponseEntity<>(vehicleService.findAll(), responseStatus);
+    public ResponseEntity updateVehicle(@RequestBody Vehicle vehicle) {
+        ErrorMessageDTO message = vehicleService.updateVehicle(vehicle);
+        if (message == null) {
+            return new ResponseEntity<>(vehicleService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
     }
 }

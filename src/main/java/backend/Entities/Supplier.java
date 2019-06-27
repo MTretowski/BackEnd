@@ -10,6 +10,7 @@ public class Supplier {
     private Collection<Fuelling> fuellingsById;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;
